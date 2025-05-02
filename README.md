@@ -1,7 +1,10 @@
-<<<<<<< HEAD
+
 # e-commerce-frontend
-=======
+
 # React + Vite
+
+Here's my backend of this frontend web
+https://github.com/monika-chandiwal/e-commerce-backend.git
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
