@@ -1,0 +1,16 @@
+/* pages.css */
+
+.signup input::placeholder {
+  color: #ccc;
+  opacity: 1;
+}
+
+.signupButton:hover,
+.loginButton:hover {
+  font-size: larger !important;
+
+  border: 1px solid #ccc;
+  background-color: rgb(226, 224, 224);
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.6rem;
+}
