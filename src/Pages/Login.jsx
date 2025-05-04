@@ -70,15 +70,18 @@ export default function Login() {
       .then((data) => {
         console.log("User logged in via Google:", data);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("Username", data.username);
+        localStorage.setItem("username", data.name);
+        localStorage.setItem("useremail", data.email);
+        localStorage.setItem("profilePic", data.picture);
+        console.log("Google user:", data);
 
-        //navigate("/home");
+        navigate("/home");
       })
       .catch((err) => {
         console.log("User not logged in", err.message);
-        localStorage.removeItem("isLoggedIn");
+        localStorage.clear();
       });
-  }, [navigate]);
+  }, []);
 
   return (
     <>

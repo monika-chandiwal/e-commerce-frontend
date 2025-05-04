@@ -17,8 +17,8 @@ export default function NavbarComponent() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const fullName = localStorage.getItem("username") || "";
   const email = localStorage.getItem("useremail") || "";
-  const profilePic = localStorage.getItem("ProfilePic");
-
+  const profilePic = localStorage.getItem("profilePic");
+  //console.log({ profilePic });
   const initials = fullName
     .split(" ")
     .map((n, i) => (i < 2 ? n[0] : ""))
@@ -27,7 +27,8 @@ export default function NavbarComponent() {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    console.log("logout ", localStorage.getItem("useremail"));
+    navigate("/home");
   };
 
   const handleOutsideClick = (e) => {
@@ -53,7 +54,14 @@ export default function NavbarComponent() {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="md">
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
+      style={{
+        minWidth: "100%",
+      }}
+    >
       <Container fluid className="mx-2">
         <Navbar.Brand href="/">StyliQue</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -67,7 +75,7 @@ export default function NavbarComponent() {
           </Nav>
 
           <Nav className="align-items-center position-relative">
-            <Form className="d-flex w-60 mx-2" onSubmit={handleSearch}>
+            <Form className="d-flex w-70" onSubmit={handleSearch}>
               <Form.Control
                 type="text"
                 placeholder="Search"
@@ -90,18 +98,12 @@ export default function NavbarComponent() {
               </Nav.Link>
             ) : (
               <div className="position-relative">
-                <div
-                  onClick={handleProfileClick}
-                  style={{
-                    cursor: "pointer",
-                    border: "1px solid white",
-                    borderRadius: "1rem",
-                    padding: "0.3rem 0.6rem",
-                    color: "white",
-                    display: "inline-block",
-                  }}
-                >
-                  {initials}
+                <div onClick={handleProfileClick}>
+                  {profilePic == null ? (
+                    initials
+                  ) : (
+                    <img src={profilePic} className="imgProperty" />
+                  )}
                 </div>
 
                 {showCard && (
@@ -110,21 +112,15 @@ export default function NavbarComponent() {
                     className="position-absolute mt-2"
                     style={{
                       right: 0,
-                      minWidth: "250px",
+
                       display: "flex",
                       flexDirection: "column",
                       textAlign: "center",
                     }}
                   >
                     <Card.Body>
-                      {profilePic ? (
-                        <Image
-                          src={profilePic}
-                          roundedCircle
-                          width="50"
-                          height="50"
-                          className="me-2"
-                        />
+                      {profilePic != null ? (
+                        <img src={profilePic} className="imgProperty" />
                       ) : (
                         <OverlayTrigger
                           overlay={

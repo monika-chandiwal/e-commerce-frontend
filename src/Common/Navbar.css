@@ -20,3 +20,8 @@ Nav :link {
 .spinning-icon {
   animation: spin 5s linear infinite;
 }
+
+.imgProperty {
+  border-radius: 50px;
+  width: 50px;
+}
