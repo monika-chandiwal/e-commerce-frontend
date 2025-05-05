@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -17,6 +17,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  console.log("Navbar theme:", theme);
 
   const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ export default function Login() {
         body: JSON.stringify({
           email: email,
           password: password,
+          profilePic: profilePic,
         }),
       });
 
@@ -46,6 +49,7 @@ export default function Login() {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("username", user.username);
       localStorage.setItem("useremail", user.email);
+      localStorage.setItem("profilePic", data.picture);
       navigate("/home");
     } catch (error) {
       console.error("Error during login:", error);
@@ -73,7 +77,7 @@ export default function Login() {
         localStorage.setItem("username", data.name);
         localStorage.setItem("useremail", data.email);
         localStorage.setItem("profilePic", data.picture);
-        console.log("Google user:", data);
+        //console.log("Google user:", data);
 
         navigate("/home");
       })
@@ -87,6 +91,8 @@ export default function Login() {
     <>
       <NavbarComponent />
       <Container
+        bg={theme}
+        variant={theme}
         fluid
         className="d-flex justify-content-center align-items-center signup bg-dark text-white"
         style={{ minHeight: "100vh" }}

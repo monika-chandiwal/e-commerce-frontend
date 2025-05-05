@@ -1,16 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState, useRef, useEffect } from "react";
-import { Navbar, Nav, Container, Form, Image, Card } from "react-bootstrap";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { Navbar, Nav, Container, Form, Card, Button } from "react-bootstrap";
 import { IoCartOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegUserCircle } from "react-icons/fa";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import ThemeContext from "./ThemeContext";
 
 export default function NavbarComponent() {
   const [query, setQuery] = useState("");
   const [showCard, setShowCard] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  console.log("Navbar theme:", theme);
   const cardRef = useRef(null);
   const navigate = useNavigate();
 
@@ -55,25 +58,25 @@ export default function NavbarComponent() {
 
   return (
     <Navbar
-      bg="dark"
-      variant="dark"
       expand="lg"
+      bg={theme}
+      variant={theme}
       style={{
         minWidth: "100%",
       }}
     >
-      <Container fluid className="mx-2">
+      {" "}
+      <Container fluid className="mx-2 ">
         <Navbar.Brand href="/">StyliQue</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto align-items-center w-100">
+          <Nav className="ms-auto align-items-center  w-100">
             <Nav.Link href="/">MEN</Nav.Link>
             <Nav.Link href="/women">WOMEN</Nav.Link>
             <Nav.Link href="/kids">KIDS</Nav.Link>
             <Nav.Link href="/home">HOME</Nav.Link>
             <Nav.Link href="/cart">BEAUTY</Nav.Link>
           </Nav>
-
           <Nav className="align-items-center position-relative">
             <Form className="d-flex w-70" onSubmit={handleSearch}>
               <Form.Control
@@ -109,10 +112,10 @@ export default function NavbarComponent() {
                 {showCard && (
                   <Card
                     ref={cardRef}
-                    className="position-absolute mt-2"
+                    className="position-absolute mt-2 "
                     style={{
                       right: 0,
-
+                      minWidth: "15rem",
                       display: "flex",
                       flexDirection: "column",
                       textAlign: "center",
@@ -153,6 +156,18 @@ export default function NavbarComponent() {
                           {email}
                         </div>
                       </div>
+                      <Form>
+                        <Form.Check
+                          className="d-flexjustify-content-center position-relative mt-2 "
+                          style={{ bottom: 0 }}
+                          onClick={toggleTheme}
+                          type="switch"
+                          id="custom-switch"
+                          label={`Switch to ${
+                            theme === "light" ? "Dark" : "Light"
+                          } Mode`}
+                        />
+                      </Form>
                     </Card.Body>
                     <Card.Footer>
                       <button

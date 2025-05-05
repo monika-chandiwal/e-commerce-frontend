@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { Container, Nav } from "react-bootstrap";
 import InputGroup from "react-bootstrap/InputGroup";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import "./pages.css";
 import { toast, ToastContainer } from "react-toastify";
@@ -17,6 +17,8 @@ export default function Signup() {
   const [email, setEmail] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  console.log("Navbar theme:", theme);
   const saveUser = (e) => {
     e.preventDefault();
     const user = { email, username, password };
@@ -38,6 +40,8 @@ export default function Signup() {
 
   return (
     <Container
+      bg={theme}
+      variant={theme}
       fluid
       className="d-flex justify-content-center align-items-center signup bg-dark text-white"
       style={{ minHeight: "100vh" }}
