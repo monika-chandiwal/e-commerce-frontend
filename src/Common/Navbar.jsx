@@ -13,7 +13,7 @@ export default function NavbarComponent() {
   const [query, setQuery] = useState("");
   const [showCard, setShowCard] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
-  console.log("Navbar theme:", theme);
+  //console.log("Navbar theme:", theme);
   const cardRef = useRef(null);
   const navigate = useNavigate();
 
@@ -28,10 +28,18 @@ export default function NavbarComponent() {
     .join("")
     .toUpperCase();
 
-  const handleLogout = () => {
-    localStorage.clear();
-    console.log("logout ", localStorage.getItem("useremail"));
-    navigate("/home");
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:8080/logout", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      localStorage.clear();
+      navigate("/login"); // this is frontend redirect
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
 
   const handleOutsideClick = (e) => {

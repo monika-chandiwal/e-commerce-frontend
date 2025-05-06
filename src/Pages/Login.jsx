@@ -10,6 +10,7 @@ import { FcGoogle } from "react-icons/fc";
 import "./pages.css";
 import NavbarComponent from "../Common/Navbar";
 import { useNavigate } from "react-router-dom";
+import ThemeContext from "../Common/ThemeContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +19,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { theme, toggleTheme } = useContext(ThemeContext);
-  console.log("Navbar theme:", theme);
+  //console.log("Navbar theme:", theme);
 
   const navigate = useNavigate();
 
@@ -36,7 +37,6 @@ export default function Login() {
         body: JSON.stringify({
           email: email,
           password: password,
-          profilePic: profilePic,
         }),
       });
 
@@ -49,7 +49,7 @@ export default function Login() {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("username", user.username);
       localStorage.setItem("useremail", user.email);
-      localStorage.setItem("profilePic", data.picture);
+
       navigate("/home");
     } catch (error) {
       console.error("Error during login:", error);
@@ -59,7 +59,8 @@ export default function Login() {
 
   // Google OAuth login handler
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href =
+      "http://localhost:8080/oauth2/authorization/google?prompt=select_account";
   };
 
   // Check Google login session
