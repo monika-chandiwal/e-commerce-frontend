@@ -34,7 +34,7 @@ export default function NavbarComponent() {
         method: "GET",
         credentials: "include",
       });
-
+      console.log("logout", localStorage.getItem("username"));
       localStorage.clear();
       navigate("/login"); // this is frontend redirect
     } catch (err) {
@@ -111,7 +111,7 @@ export default function NavbarComponent() {
               <div className="position-relative">
                 <div onClick={handleProfileClick}>
                   {profilePic == null ? (
-                    initials
+                    <p className="loginUserProperty">{initials}</p>
                   ) : (
                     <img src={profilePic} className="imgProperty" />
                   )}

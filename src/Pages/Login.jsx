@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import { Container, Nav } from "react-bootstrap";
-import InputGroup from "react-bootstrap/InputGroup";
+import React, { useState, useContext } from "react";
+import {
+  Button,
+  Col,
+  Form,
+  Row,
+  Container,
+  InputGroup,
+  Nav,
+} from "react-bootstrap";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import "./pages.css";
@@ -18,14 +21,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  //console.log("Navbar theme:", theme);
 
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  // Handle user login (manual)
+  // Handle manual login
   const loginUser = async (e) => {
     e.preventDefault();
+    setError(""); // Clear old error
 
     try {
       const response = await fetch("http://localhost:8080/login", {
@@ -34,26 +37,20 @@ export default function Login() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
+      if (!response.ok) throw new Error("Invalid credentials");
 
       const user = await response.json();
-      console.log("User logged in:", user);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("username", user.username);
       localStorage.setItem("useremail", user.email);
-
+      console.log("Manual login ", user);
       navigate("/home");
     } catch (error) {
-      console.error("Error during login:", error);
-      setError("Invalid email or password.");
+      console.error("Login failed:", error);
+      setError("Invalid email or password. Please try again.");
     }
   };
 
@@ -63,50 +60,22 @@ export default function Login() {
       "http://localhost:8080/oauth2/authorization/google?prompt=select_account";
   };
 
-  // Check Google login session
-  useEffect(() => {
-    fetch("http://localhost:8080/current-user", {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Not authenticated");
-        return res.json();
-      })
-      .then((data) => {
-        console.log("User logged in via Google:", data);
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", data.name);
-        localStorage.setItem("useremail", data.email);
-        localStorage.setItem("profilePic", data.picture);
-        //console.log("Google user:", data);
-
-        navigate("/home");
-      })
-      .catch((err) => {
-        console.log("User not logged in", err.message);
-        localStorage.clear();
-      });
-  }, []);
-
   return (
     <>
       <NavbarComponent />
       <Container
-        bg={theme}
-        variant={theme}
         fluid
         className="d-flex justify-content-center align-items-center signup bg-dark text-white"
         style={{ minHeight: "100vh" }}
       >
         <Form
           onSubmit={loginUser}
-          method="POST"
-          style={{ width: "100%", maxWidth: "600px" }}
           className="p-4 rounded bg-secondary"
+          style={{ width: "100%", maxWidth: "600px" }}
         >
           <h3 className="text-center mb-5">Login</h3>
 
-          {/* Show error message */}
+          {/* Error Message */}
           {error && <p className="text-danger text-center">{error}</p>}
 
           {/* Email */}
@@ -115,7 +84,6 @@ export default function Login() {
               <Form.Control
                 type="email"
                 placeholder="Email"
-                name="email"
                 className="bg-dark text-white border-light"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -125,11 +93,7 @@ export default function Login() {
           </Form.Group>
 
           {/* Password */}
-          <Form.Group
-            as={Row}
-            className="mb-4 justify-content-center"
-            style={{ border: "1px solid #6c757d" }}
-          >
+          <Form.Group as={Row} className="mb-4 justify-content-center">
             <Col sm={8}>
               <InputGroup
                 style={{
@@ -144,7 +108,6 @@ export default function Login() {
                 <Form.Control
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  name="password"
                   className="bg-dark text-white border-light"
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
@@ -179,16 +142,16 @@ export default function Login() {
 
           {/* Signup Link */}
           <p className="text-center mt-4">
-            Create new account{" "}
+            Don't have an account?{" "}
             <Nav.Link
               href="/signup"
-              style={{ display: "inline-block", color: "black" }}
+              style={{ display: "inline", color: "black" }}
             >
               Signup
             </Nav.Link>
           </p>
 
-          {/* Google Login */}
+          {/* Google OAuth Button */}
           <div className="text-center mt-3">
             <Button onClick={handleGoogleLogin} variant="light">
               <FcGoogle /> Continue with Google
