@@ -1,71 +1,91 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import { Container, Nav } from "react-bootstrap";
-import InputGroup from "react-bootstrap/InputGroup";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
+import {
+  Button,
+  Col,
+  Form,
+  Row,
+  Container,
+  Nav,
+  InputGroup,
+} from "react-bootstrap";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import "./pages.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ThemeContext from "../Common/ThemeContext";
 import NavbarComponent from "../Common/Navbar";
 import { FcGoogle } from "react-icons/fc";
+import EmailVerification from "./EmailVerification";
+import "./pages.css";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [email, setEmail] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [toFactorAuthentication, setToFactorAuthentication] =
-    React.useState(false);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [toFactorAuthentication, setToFactorAuthentication] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [startEmailVerification, setStartEmailVerification] = useState(false);
+
   const { theme } = useContext(ThemeContext);
 
   const saveUser = (e) => {
     e.preventDefault();
     const user = { email, username, password, toFactorAuthentication };
-
-    fetch("http://localhost:8080/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        if (response.ok) {
-          toast.success(`${user.username} Signup Successfully!`, {
+    {
+      isEmailVerified
+        ? fetch("http://localhost:8080/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+          })
+            .then((response) => {
+              if (response.ok) {
+                toast.success(`${user.username} signed up successfully!`, {
+                  position: "bottom-left",
+                  autoClose: 3000,
+                });
+              } else if (response.status === 409) {
+                response.text().then((errorMessage) => {
+                  toast.error(`${errorMessage}, try again`, {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                  });
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Network error:", error);
+              toast.error("Something went wrong. Please try again later.", {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: true,
+              });
+            })
+        : toast.warning("please verify your email first", {
+            autoClose: 4000,
             position: "bottom-left",
-            closeOnClick: true,
-            autoClose: 3000,
+            hideProgressBar: true,
           });
-        } else if (response.status === 409) {
-          // Email already exists
-          response.text().then((errorMessage) => {
-            toast.error(`${errorMessage}, try again`, {
-              position: "bottom-left",
-              closeOnClick: true,
-              autoClose: 5000,
-              hideProgressBar: true,
-            });
-          });
-        }
-      })
-      .catch((error) => {
-        // Network or unexpected error
-        console.error("Network error:", error);
-        toast.error("Something went wrong. Please try again later.", {
-          position: "bottom-left",
-          autoClose: 3000,
-          hideProgressBar: true,
-        });
-      });
+    }
   };
 
   const handleGoogleLogin = () => {
-    // Redirect browser to Spring Boot OAuth2 endpoint
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href =
+      "http://localhost:8080/oauth2/authorization/google?prompt=select_account";
+  };
+
+  const handleEmailVerify = () => {
+    if (!email) {
+      toast.warning("Please enter an email before verifying", {
+        position: "bottom-left",
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    setStartEmailVerification(true); // triggers EmailVerification component
   };
 
   return (
@@ -78,7 +98,6 @@ export default function Signup() {
       >
         <Form
           onSubmit={saveUser}
-          method="POST"
           style={{ width: "100%", maxWidth: "600px" }}
           className="p-4 rounded bg-secondary"
         >
@@ -91,7 +110,6 @@ export default function Signup() {
                 required
                 type="text"
                 placeholder="Username"
-                name="username"
                 className="bg-dark text-white border-light"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -102,25 +120,6 @@ export default function Signup() {
           {/* Email */}
           <Form.Group as={Row} className="mb-4 justify-content-center">
             <Col sm={8}>
-              <Form.Control
-                required
-                type="email"
-                placeholder="Email"
-                name="email"
-                className="bg-dark text-white border-light"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Col>
-          </Form.Group>
-
-          {/* Password */}
-          <Form.Group
-            as={Row}
-            className="mb-4 justify-content-center"
-            style={{ border: "1px solid #6c757d" }}
-          >
-            <Col sm={8}>
               <InputGroup
                 style={{
                   border: "1px solid #ced4da",
@@ -128,26 +127,18 @@ export default function Signup() {
                   boxShadow: isFocused
                     ? "0 0 0 0.25rem rgba(13, 110, 253, 0.25)"
                     : "none",
-                  transition: "box-shadow 0.3s ease",
                 }}
               >
                 <Form.Control
                   required
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  name="password"
+                  type="email"
+                  placeholder="Email"
                   className="bg-dark text-white border-light"
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  style={{
-                    border: "none",
-                    boxShadow: "none",
-                  }}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <InputGroup.Text
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={handleEmailVerify}
                   style={{
                     backgroundColor: "#212529",
                     color: "white",
@@ -155,31 +146,66 @@ export default function Signup() {
                     border: "none",
                   }}
                 >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                  {isEmailVerified ? "Verified" : "Verify"}
                 </InputGroup.Text>
               </InputGroup>
             </Col>
           </Form.Group>
 
+          {/* Password */}
+          {isEmailVerified && (
+            <Form.Group as={Row} className="mb-4 justify-content-center">
+              <Col sm={8}>
+                <InputGroup
+                  style={{
+                    border: "1px solid #ced4da",
+                    borderRadius: ".375rem",
+                    boxShadow: isFocused
+                      ? "0 0 0 0.25rem rgba(13, 110, 253, 0.25)"
+                      : "none",
+                  }}
+                >
+                  <Form.Control
+                    required
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    className="bg-dark text-white border-light"
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <InputGroup.Text
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      backgroundColor: "#212529",
+                      color: "white",
+                      cursor: "pointer",
+                      border: "none",
+                    }}
+                  >
+                    {showPassword ? <FaEye /> : <FaEyeSlash />}
+                  </InputGroup.Text>
+                </InputGroup>
+              </Col>
+            </Form.Group>
+          )}
+
           {/* 2FA */}
           <Form.Group as={Row} className="mt-3 justify-content-center">
-            <Col
-              sm={8}
-              className="d-flex text-white border-light"
-              value={toFactorAuthentication}
-              onChange={(e) => setToFactorAuthentication(e.target.checked)}
-            >
+            <Col sm={8}>
               <Form.Check
                 type="checkbox"
-                id="2fa-checkbox"
                 label={`${
                   toFactorAuthentication ? "Disable" : "Enable"
                 } two-factor authentication`}
+                checked={toFactorAuthentication}
+                onChange={(e) => setToFactorAuthentication(e.target.checked)}
               />
             </Col>
           </Form.Group>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <Form.Group as={Row} className="mt-3 justify-content-center">
             <Col sm={8} className="d-flex justify-content-center">
               <Button variant={theme} type="submit">
@@ -188,21 +214,36 @@ export default function Signup() {
             </Col>
           </Form.Group>
 
-          {/* Google Login Button */}
+          {/* Google Login */}
           <Form.Group as={Row} className="mt-3 justify-content-center">
-            <div className="text-center mt-3">
+            <Col className="text-center">
               <Button onClick={handleGoogleLogin} variant={theme}>
                 <FcGoogle /> Continue with Google
               </Button>
-            </div>
+            </Col>
           </Form.Group>
 
-          {/* Already have an account */}
-          <p style={{ textAlign: "center", marginTop: "1.5rem" }}>
+          {/* Already have account */}
+          <p className="text-center mt-4">
             Already have an account? <LoginButton />
           </p>
         </Form>
+
+        {/* Toasts & Email Verification */}
         <ToastContainer />
+        {startEmailVerification && (
+          <EmailVerification
+            prop={email}
+            onVerified={() => {
+              setIsEmailVerified(true);
+              setStartEmailVerification(false);
+              toast.success("Email verified successfully!", {
+                position: "bottom-left",
+                autoClose: 2000,
+              });
+            }}
+          />
+        )}
       </Container>
     </>
   );

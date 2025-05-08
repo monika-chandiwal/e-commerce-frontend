@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function OAuth2RedirectHandler() {
   const navigate = useNavigate();
+  const [status, setStatus] = useState("Logging you in via Google...");
 
   useEffect(() => {
     const fetchUser = async (retries = 3) => {
@@ -26,7 +27,8 @@ export default function OAuth2RedirectHandler() {
         } else {
           console.error("OAuth login failed:", err.message);
           localStorage.clear();
-          navigate("/login");
+          setStatus("Login failed. Redirecting to login page...");
+          setTimeout(() => navigate("/login"), 1500);
         }
       }
     };
@@ -34,7 +36,5 @@ export default function OAuth2RedirectHandler() {
     fetchUser();
   }, [navigate]);
 
-  return (
-    <p className="text-center mt-5 text-white">Logging you in via Google...</p>
-  );
+  return <p className="text-center mt-5 text-white">{status}</p>;
 }
