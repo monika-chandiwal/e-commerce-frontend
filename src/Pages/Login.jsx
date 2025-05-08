@@ -24,6 +24,9 @@ export default function Login() {
 
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
+  const updatePassword = () => {
+    console.log("password updated");
+  };
 
   // Handle manual login
   const loginUser = async (e) => {
@@ -128,13 +131,20 @@ export default function Login() {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </InputGroup.Text>
               </InputGroup>
+              <Nav.Link
+                className="forgotPassword"
+                onClick={updatePassword}
+                variant={theme}
+              >
+                Forgot password
+              </Nav.Link>
             </Col>
           </Form.Group>
 
           {/* Login Button */}
           <Form.Group as={Row} className="mt-3 justify-content-center">
             <Col sm={8} className="d-flex justify-content-center">
-              <Button variant="light" type="submit">
+              <Button variant={theme} type="submit">
                 Login
               </Button>
             </Col>
@@ -153,7 +163,7 @@ export default function Login() {
 
           {/* Google OAuth Button */}
           <div className="text-center mt-3">
-            <Button onClick={handleGoogleLogin} variant="light">
+            <Button onClick={handleGoogleLogin} variant={theme}>
               <FcGoogle /> Continue with Google
             </Button>
           </div>

@@ -45,3 +45,11 @@ body.dark {
   background-color: #121212;
   color: white;
 }
+
+.forgotPassword {
+  text-align: right;
+  cursor: pointer;
+}
+.forgotPassword:hover {
+  text-decoration: underline;
+}
