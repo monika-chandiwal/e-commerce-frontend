@@ -123,6 +123,7 @@ export default function NavbarComponent() {
                     className="position-absolute mt-2 "
                     style={{
                       right: 0,
+                      zIndex: "999",
                       minWidth: "15rem",
                       display: "flex",
                       flexDirection: "column",

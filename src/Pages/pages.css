@@ -14,3 +14,38 @@
   border-radius: 0.5rem;
   padding: 0.3rem 0.6rem;
 }
+
+.polygon-footer {
+  padding: 3rem 1rem 2rem;
+
+  clip-path: polygon(
+    32% 13%,
+    68% 0,
+    100% 11%,
+    100% 100%,
+    70% 100%,
+    30% 100%,
+    0 99%,
+    0 0
+  );
+  text-align: center;
+}
+
+.ContactIcons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.footerContent {
+  font-size: 0.9rem;
+}
+.footerContent :link:hover {
+  text-decoration: underline;
+  font-size: 1rem;
+}
+
+.contactForm {
+}
