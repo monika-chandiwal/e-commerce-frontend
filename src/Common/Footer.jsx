@@ -1,16 +1,14 @@
 import React from "react";
-import { Container, Nav } from "react-bootstrap";
+import { Container, Nav, Image } from "react-bootstrap";
 import ThemeContext from "../Common/ThemeContext";
 import { useContext } from "react";
 
-import { WhatsApp, LinkedIn, Gmail, GitHub } from "../../public/icons.jsx";
+import { WhatsApp, LinkedIn, Gmail, GitHub, Map } from "../../public/icons.jsx";
 import "../Pages/pages.css";
 
 export default function FooterComponent() {
   const { theme } = useContext(ThemeContext);
-  const handleClick = () => {
-    window.location.href = "mailto:monikachandiwal04@gmail.com";
-  };
+
   return (
     <Container
       bg={theme}
@@ -25,7 +23,7 @@ export default function FooterComponent() {
     >
       <div
         className="polygon-footer"
-        style={{ background: theme == "light" ? "black" : "#f3f0f0" }}
+        style={{ background: theme == "light" ? "#444" : "#f3f0f0" }}
       >
         <div className="ContactIcons banner-footer-bg">
           <Nav.Link href="https://github.com/monika-chandiwal">
@@ -44,6 +42,9 @@ export default function FooterComponent() {
           >
             <Gmail />
           </Nav.Link>
+          <Nav.Link href="/aboutUs" target="_blank" rel="noopener noreferrer">
+            <Map />
+          </Nav.Link>
         </div>
         <div className="footerContent">
           <p>
@@ -52,6 +53,12 @@ export default function FooterComponent() {
               Contact Us
             </Nav.Link>
           </p>
+          <Nav.Link
+            href="/aboutUs"
+            className="aboutButton mb-3 d-inline-block "
+          >
+            AboutUs
+          </Nav.Link>
           <p>© 2025 All rights reserved</p>
         </div>
       </div>
