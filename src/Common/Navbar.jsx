@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Navbar, Nav, Container, Form, Card, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Form, Card } from "react-bootstrap";
 import { IoCartOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegUserCircle } from "react-icons/fa";
 import "./Navbar.css";
@@ -21,6 +21,9 @@ export default function NavbarComponent() {
   const fullName = localStorage.getItem("username") || "";
   const email = localStorage.getItem("useremail") || "";
   const profilePic = localStorage.getItem("profilePic");
+  const [profile, setProfile] = useState("");
+  console.log(profile);
+
   //console.log({ profilePic });
   const initials = fullName
     .split(" ")
@@ -142,15 +145,26 @@ export default function NavbarComponent() {
                           }
                         >
                           <span className="d-inline-block">
-                            <FiUserPlus
-                              size={30}
-                              style={{
-                                border: "1px solid gray",
-                                borderRadius: "2rem",
-                                cursor: "pointer",
-                              }}
-                              className="m-2 p-1"
-                            />
+                            <Form.Group>
+                              <Form.Label htmlFor="hiddenFileInput">
+                                <FiUserPlus
+                                  size={30}
+                                  style={{
+                                    border: "1px solid gray",
+                                    borderRadius: "2rem",
+                                    cursor: "pointer",
+                                  }}
+                                  className="m-2 p-1"
+                                />
+                              </Form.Label>
+                              <Form.Control
+                                type="file"
+                                id="hiddenFileInput"
+                                style={{ display: "none" }}
+                                value={profile}
+                                onChange={(e) => setProfile(e.target.value)}
+                              />
+                            </Form.Group>
                           </span>
                         </OverlayTrigger>
                       )}

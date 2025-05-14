@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
 import { Container } from "react-bootstrap";
 import NavbarComponent from "../Common/Navbar";
-import FooterComponent from "../Common/Footer";
+
 import ThemeContext from "../Common/ThemeContext";
-import { map } from "../../public/icons.jsx";
-import { BiPolygon } from "react-icons/bi";
+
 export default function AboutUs() {
   const theme = useContext(ThemeContext);
   return (

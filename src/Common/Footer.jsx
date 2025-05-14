@@ -59,6 +59,8 @@ export default function FooterComponent() {
           >
             AboutUs
           </Nav.Link>
+        </div>
+        <div>
           <p>© 2025 All rights reserved</p>
         </div>
       </div>
