@@ -47,3 +47,39 @@
   text-decoration: underline;
   font-size: 1rem;
 }
+
+.products {
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1rem 1rem 10rem 1rem;
+}
+.products li {
+  list-style: none;
+  margin: 5px 10px;
+}
+.products li .imageStyle {
+  width: 100%;
+  height: 15rem;
+  object-fit: cover !important;
+  transition: transform 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+.products li:hover .wishlist {
+  display: block;
+  cursor: pointer;
+}
+.wishlist {
+  display: none;
+}
+
+.wishlist .button {
+  width: 100% !important;
+  background: none;
+  border: 1px solid gray;
+  color: black;
+  border-radius: 0;
+}

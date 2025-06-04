@@ -82,11 +82,11 @@ export default function NavbarComponent() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center  w-100">
-            <Nav.Link href="/">MEN</Nav.Link>
-            <Nav.Link href="/women">WOMEN</Nav.Link>
-            <Nav.Link href="/kids">KIDS</Nav.Link>
+            <Nav.Link href="/products?category=men">MEN</Nav.Link>
+            <Nav.Link href="/products?category=women">WOMEN</Nav.Link>
+            <Nav.Link href="/products?category=kids">KIDS</Nav.Link>
             <Nav.Link href="/home">HOME</Nav.Link>
-            <Nav.Link href="/cart">BEAUTY</Nav.Link>
+            <Nav.Link href="/products?category=beauty">BEAUTY</Nav.Link>
           </Nav>
           <Nav className="align-items-center position-relative">
             <Form className="d-flex w-70" onSubmit={handleSearch}>
